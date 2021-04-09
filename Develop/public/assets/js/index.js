@@ -6,7 +6,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
-// If we are in the /notes route, get references to our DOM to save user input
+// If we are in the /notes route, get references to our DOM to save user input and show & hide notes
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
@@ -29,7 +29,7 @@ const hide = (elem) => {
 let activeNote = {};
 
 
-// Fetch (DELETE) an existing note in notes array at index specified  
+// Fetch (DELETE) an existing note in notes array with specified id
 const deleteNote = (id) => {
   return fetch(`/api/notes/${id}`, {
     method: 'DELETE',
@@ -38,10 +38,6 @@ const deleteNote = (id) => {
     },
   });
 }
-  
-
-
-
 
 // Fetch (POST) new note to our db.json file using our api
 const saveNote = (note) => {
@@ -54,9 +50,8 @@ const saveNote = (note) => {
   });
 }
 
-
 // Called when user clicks on Save Button. Saves the active note to the DB
-// (db.json). When that POST to /api/notes completes, then calls our two 
+// (db.json). When the POST to /api/notes completes, then calls our two 
 // render notes functions to render existing notes and the active note.
 const handleNoteSave = () => {
   const newNote = {
@@ -68,8 +63,6 @@ const handleNoteSave = () => {
     renderActiveNote();
   });
 };
-
-
 
 // Delete the clicked note
 const handleNoteDelete = (e) => {
@@ -89,22 +82,16 @@ const handleNoteDelete = (e) => {
   });
 };
 
-
-// Display the active note.....???????
+// Display the active note or allow user to enter a new one
 const renderActiveNote = () => {
-  console.log("In Render Active Note");
   hide(saveNoteBtn);
 
-  console.log("Active Note.id = " + activeNote.id);
-
   if (activeNote.id === undefined) {
-    console.log("We are undefined.");
     noteTitle.removeAttribute('readonly');
     noteText.removeAttribute('readonly');
     noteTitle.value = '';
     noteText.value = '';
   } else if (activeNote.id) {
-    console.log("We have an active ID");
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -118,22 +105,17 @@ const renderActiveNote = () => {
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
   e.preventDefault();
-  console.log("In Handle Note View Function Clicked on SPAN Element");
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
-  console.log("Active Note: " + activeNote);
   renderActiveNote();
 };
 
-
-
-// Sets the activeNote to and empty object and allows the user to enter a new note
+// Sets the activeNote to an empty object and allows the user to enter a new note
 const handleNewNoteView = (e) => {
   activeNote = {};
   renderActiveNote();
 };
 
-
-
+// Shows and hides the save button as needed
 const handleRenderSaveBtn = () => {
   if (!noteTitle.value.trim() || !noteText.value.trim()) {
     hide(saveNoteBtn);
@@ -142,12 +124,8 @@ const handleRenderSaveBtn = () => {
   }
 };
 
-
-
-// Render the list of note titles
+// Renders the list of note titles
 const renderNoteList = async (notes) => {
-
-  console.log("In renderNoteList, promise received");
 
   let jsonNotes = await notes.json();
 
@@ -214,10 +192,7 @@ const getNotes = () => {
 // Get existing notes from the db and render them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
-
-/*******************************************************************/
-/*                  MAIN CONTENT                                   */
-/*******************************************************************/
+// Listen for events when we're in the /notes route
 if (window.location.pathname === '/notes') {
   // Add event listeners
   saveNoteBtn.addEventListener('click', handleNoteSave);
@@ -226,4 +201,5 @@ if (window.location.pathname === '/notes') {
   noteText.addEventListener('keyup', handleRenderSaveBtn);
 }
 
+// Initial function call to get and render notes
 getAndRenderNotes();

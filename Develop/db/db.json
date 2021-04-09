@@ -25,28 +25,13 @@
     "id": 5
   },
   {
-    "title": "Another note...",
-    "text": "afeaf",
+    "title": "hello",
+    "text": "world",
     "id": 6
   },
   {
-    "title": "hello",
-    "text": "world",
+    "title": "Go to bank",
+    "text": "Deposit checks",
     "id": 7
-  },
-  {
-    "title": "another note",
-    "text": "afe",
-    "id": 8
-  },
-  {
-    "title": "new note",
-    "text": "afeef",
-    "id": 9
-  },
-  {
-    "title": "Keilani",
-    "text": "KK:LKJ",
-    "id": 10
   }
 ]
